@@ -1,6 +1,7 @@
 FROM ubuntu:trusty
 MAINTAINER Eric Crosson <ecrosson@shoretel.com>
 
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
 apt-get install -y --no-install-recommends software-properties-common=0.92.37.7 python-software-properties=0.92.37.7 && \
 add-apt-repository -y ppa:ansible/ansible && \
