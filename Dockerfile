@@ -9,8 +9,9 @@ apt-get update && \
 apt-get install -y --no-install-recommends ansible=2.2.1.0-1ppa~trusty && \
 apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# switch to uid/gid identical to host uid/gid (forks/users), if not doing this, files that
-# clang-format written will change user and group all to root.
-USER 1000:100
+# switch to uid/gid identical to host uid/gid (forks/users), if not
+# doing this, files that clang-format written will change user and
+# group all to root.
+# USER 1000:100
 
 ENTRYPOINT []
