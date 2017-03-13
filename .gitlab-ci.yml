@@ -2,6 +2,7 @@
 stages:
   - lint
   - build
+  # TODO: push to local registry
 
 services:
   - docker:dind
@@ -16,4 +17,4 @@ docker_build:
   stage: build
   image: docker:latest
   script:
-    - docker build -t ecrosson/ubuntu-ansible:trusty .
+    - bin/build-docker
