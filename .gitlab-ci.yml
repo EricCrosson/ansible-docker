@@ -2,7 +2,6 @@
 stages:
   - lint
   - build
-  # TODO: push to local registry
 
 services:
   - docker:dind
