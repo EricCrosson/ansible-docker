@@ -1,0 +1,28 @@
+sudo: required
+
+services:
+  - docker
+
+install:
+  - gem install bundle
+  - bundle install
+
+before_script:
+  - docker run --rm -i lukasmartinelli/hadolint < Dockerfile
+  - docker build -t serverspec .
+
+script:
+  - rake spec
+
+after_success:
+  - export image='hamroctopus/ansible'
+  - if [[ "$TRAVIS_PULL_REQUEST" != "false" || "$TRAVIS_BRANCH" != "master" ]]; then exit 0; fi
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - docker tag serverspec "${image}:latest"
+  - docker push "${image}"
+
+env:
+  global:
+  - secure: Dy508QMovXb2ETByaO1FrJc/RLpsRLXdyHAnRR76Pv42glc+vaTz6conlZ/Ao2UpnL1ji/zegZnd8+aozZ0O2XDZ9RSBKRHchFex6ME5yf+LnD6158CfVYNIbGjHc9Gw84yMr1fN4ysXSl6J9li2l9Q+tJs8XIWuTnuijBXvjQVFVKP7dCAwhz48CiHJLlgpJTxyMmz3Lj8QS1HxKR/iUbbUeFJP+vY3JVCVFQ7ijYQN/3QQikSztzBbnL4f0Mj1LlI8t22RW7kkl2U43QXNMXMXAPgf2T8Q/zCghIjkbwlKsrDPfC3n3eZ3iDyhn5Kw7j8XB49RNNlhFWAwjKI0fw9trNCA2rFDeEupV3nvUAv6XMfoeC/0hSBdxNE/o/soDBOekkloHj4O2hFPZrjobLei6beK2zbC2h/bXwlAVIq3ergZNJiiKTxHrwgASQIz7rTfH4f3tAlkUvhfF9WQmA0RpoZAvRE8ALwMlp75ZRiW6k+DAoSPQYsxLmSbZjijI2t1F8ofdUzd4k+WkiJp1+idU0/jwukfDSCDYRrekDl7WuMw4coT8Cq28W2lTZxyeT5yC+5YDEQRV/h3XlWA76TrVkFAHDmLSWbfxk+XXIM5SJRA0DteD16tY0X1h80Bgb2hr2Rc+Km2gH+Lmfs9ESBZBYvvcvghIoKRjSmXaqI=
+  - secure: ps1TnYH+MmlcFc7vRmqQMPmQ2Ncl9eac4fS7Vi9ZJ5SOe5f93oeSj89TXQOEvkMPpR2j+6aD+wm6SHyTwixvAIb8XhmeG3YfUo8gJRsVvsiG7zFoYaAQu5x3cb5tyPMeRokHi7q94MKDyHZn6l692BWqmG2nWqGv739ZQpF1Q0w4J9Hqm19YMqm3qyAkaeNsO5hlVQ3Sufyd+JtEYHRHlZzCG8fINaJMmm8dVracPLihMRmQg7raLmid5jUqzcPFxHJ7B1FN1sfLe0tlEoJmN21IVUXGkidkKQOa9Me6MEUqbST+Uz5+sQq/zXpH6uHqJMNB2yw1mof2i86yeYgALaag4Fl/OkE5wqHqQbq1pilv3m9CeX+2npanz6HtNJeWulP0XcjP/jC67PGhvT9N6pAJepVqxshHgSBQnUqriIhqw9sFystOL+l3KiWlqzjaFP0CrDk55wwfr4jrac8oIrOUB6268tE0YT4gzKrHIhbABwOuoTEojlYNaKZGLJWiZwSqurdMyraUKPhoBAPzutMC82PGC6TXvGkObGoM9yzVbpyJuuY7rLCRKVsgaR8AM6EtDb3JGVZ0u+RMh8FH1jJMq8p4tK2jacDhUAfpEzCgRgKnpc/0Vxu9vYXC4cPrXFxRcnnhqkrzS9JUcTfOV7MP/QwIgIyGI6MKuE3Yf9Y=
+  - secure: lQd+M98/3zHIPGe+BpHs35Ev7RooUl+iLfme3Wm+yugmQTJ5yh74zeBjRsTdbkycxWtvKyF5Lp6RrEnUrpIQjuEqFst6On8IaeeRxwEVg7LjyHB960wa2ppkZe14pXBrmrU4B5N7QfNOyfFFErOLaZYNpMEoWUoRpOJWxr4n5IE9v3NsvGKHSIJ7/cjNxiVxywesi+hKdCd2ruskbU7sksxQGRzNRQl1YLhVcl7XgZcfbyrSZlOpy5h/XsEc5ySnn0pFosdR0ea73FdLml4fzjZSAUVoC/jCR5qIPQxycyxwiXRphUNIRQZntUOTwBdiuRCdHFfgJgPfbjvczRJ7sLPh62Hb89ceJwYSUkKIDxzcqjw6DEXqXo84QhaTcx3rX9Z8rNn48HwDFJnzTnAVnmj3xHwZy1LxBcV8bANehyUvXisK/P3lweGvDg9eeC910p799p+wD+Ztqr3k+TbVmFLKXm0ScEneIppWfpP1CEMfOD9G5/Ryj1r/p6ivy/OW1ph0RJHivjWCFag3TBHsxV6cXHVqSnQUXcS8JjapK6UAdcDCM1+0DdNLFx0BGIzpQndMnGwCgIvOhe4trUbcyevrv0A8Mbv9EFAndXD76nhAPNhgzmgkF0fuMGdZ3+emA9VxBqwQVCCvAt4VHZyaEj8q69bN8DHXPsXDXJPVSF4=
