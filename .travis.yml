@@ -17,7 +17,7 @@ script:
 after_success:
   - export image='hamroctopus/ansible'
   - if [[ "$TRAVIS_PULL_REQUEST" != "false" || "$TRAVIS_BRANCH" != "master" ]]; then exit 0; fi
-  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - docker login -u=$DOCKER_USER -p=$DOCKER_PASS
   - docker tag ansible "${image}:latest"
   - docker push "${image}"
 
