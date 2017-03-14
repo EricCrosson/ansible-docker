@@ -9,7 +9,7 @@ install:
 
 before_script:
   - docker run --rm -i lukasmartinelli/hadolint < Dockerfile
-  - docker build -t serverspec .
+  - docker build -t ansible .
 
 script:
   - rake spec
@@ -18,7 +18,7 @@ after_success:
   - export image='hamroctopus/ansible'
   - if [[ "$TRAVIS_PULL_REQUEST" != "false" || "$TRAVIS_BRANCH" != "master" ]]; then exit 0; fi
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
-  - docker tag serverspec "${image}:latest"
+  - docker tag ansible "${image}:latest"
   - docker push "${image}"
 
 env:
