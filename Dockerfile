@@ -6,12 +6,12 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
 && apt-get install -y --no-install-recommends \
-software-properties-common=0.96.20.5 \
-python-software-properties=0.96.20.5 \
+software-properties-common \
+python-software-properties \
 && add-apt-repository -y ppa:ansible/ansible \
 && apt-get update \
 && apt-get install -y --no-install-recommends \
-ansible=2.2.1.0-1ppa~xenial \
+ansible \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/*
 
